@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/setting_tv_fake_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="5dp"
+            android:drawableRight="@drawable/ic_right_arrow"
+            android:paddingStart="25dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="20dp"
+            android:textSize="15sp"
+            android:text="Allow to Enter with Wrong password"/>
+
+        <LinearLayout
+            android:id="@+id/setting_ll_fake_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
+                android:layout_weight="8"
+                android:paddingStart="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="7dp"
+                android:text="@string/setting_fake_password"
+                android:textColor="@color/darkGray"
+                android:textSize="15sp" />
+
+            <Switch
+                android:id="@+id/setting_switch_allow_fake_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:padding="10dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="18dp"
+                android:layout_weight="8"
+                android:paddingStart="2dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="7dp"
+                android:text="Use Fingerprint to unlock"
+                android:textColor="@color/darkGray"
+                android:textSize="15sp" />
+
+            <Switch
+                android:id="@+id/setting_switch_fingerprint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:padding="10dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/setting_bt_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/setting_bt_change_password"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:transitionName="transition_change_password"/>
+
+        <Button
+            android:id="@+id/setting_bt_delete_all_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/red"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="delete all password"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+        <Button
+            android:id="@+id/setting_bt_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="#8BC34A"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="Backup"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</ScrollView>

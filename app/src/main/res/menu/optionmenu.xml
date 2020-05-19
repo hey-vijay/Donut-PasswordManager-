@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/option_new"
+        android:icon="@drawable/ic_add"
+        android:title="Add item"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/option_generate"
+        android:title="Generate password"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/option_re_arrange"
+        android:title="Rearrange"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/option_setting"
+        android:title="Setting"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/option_support"
+        android:title="Support"
+        app:showAsAction="never" />
+
+</menu>
