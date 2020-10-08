@@ -3,25 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/option_new"
-        android:icon="@drawable/ic_add"
-        android:title="Add item"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/option_generate"
-        android:title="Generate password"
+        android:id="@+id/action_generate_new_password"
+        android:title="@string/generate_password"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/option_re_arrange"
-        android:title="Rearrange"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/option_setting"
-        android:title="Setting"
+        android:id="@+id/action_open_setting"
+        android:title="@string/settings"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/option_support"
-        android:title="Support"
+        android:id="@+id/action_support"
+        android:title="@string/support"
         app:showAsAction="never" />
 
 </menu>

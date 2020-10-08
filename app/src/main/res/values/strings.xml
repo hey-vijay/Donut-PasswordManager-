@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Key</string>
+    <string name="app_name">Donut</string>
     <string name="spDescription">State Password is used to show you your real password. Instead of randomly Generated String.</string>
     <string name="hiws_desc">This app will help you to keep track of your passwords. This app Do Not require any Internet connection and so your passwords are save in your Mobile itself. This app is very simple to Use.</string>
     <string name="hiwHeading1">To Add the Password info</string>
@@ -18,12 +18,59 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome_description">Please set Up a master password to start using the App.
+    <string name="welcome_description">Please setup a master password to start using the App.
         \nNote that if the master Password is lost then the data cannot be recover.</string>
     <string name="dialog_generate_password_header">Enter the Label and the Account ID/Address.</string>
     <string name="dialog_regenerate">Tap multiple times to generate unique passwords of different type and length.</string>
     <string name="login_use_sensor">Use Fingerprint</string>
     <string name="setting_bt_change_password">Change Master Password</string>
     <string name="setting_fake_password">Anyone can login with wrong password.</string>
+    <string name="incorrect_password">Incorrect Password</string>
+    <string name="not_recognise">Finger Print Not recognised</string>
+    <string name="authentication_successful">successful</string>
+    <string name="biometric_negative_btton">Use Password instead</string>
+    <string name="biometric_title">Unlock</string>
+    <string name="biometric_sensor_not_available">Not available</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="save">Save</string>
+    <string name="title_password_generator">Password Generator</string>
+    <string name="app_database_name">passwordManager</string>
+    <string name="register">REGISTER</string>
+    <string name="master_password">Master password</string>
+    <string name="welcome">Welcome</string>
+    <string name="drag_and_drop">Drag and Drop</string>
+    <string name="saved">Saved</string>
+    <string name="undo">UNDO</string>
+    <string name="undo_successful">Undo successful</string>
+    <string name="deleted"> Deleted</string>
+    <string name="activity_title_key">Key</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="move_up_down">Move up and down</string>
+    <string name="old_password">Old password</string>
+    <string name="confirm_new_password">Confirm new Password</string>
+    <string name="new_password">New Password</string>
+    <string name="update">Update</string>
+    <string name="generate_password">Generate password</string>
+    <string name="settings">Settings</string>
+    <string name="support">Support</string>
+    <string name="enable_copy_to_clipboard">Enable Copy to ClipBoard from Settings.</string>
+    <string name="copied">Password copied.</string>
+    <string name="label">LABEL USER PASSWORD</string>
+    <string name="backup">Backup</string>
+    <string name="delete_all_password">Delete all password</string>
+    <string name="disable_blur_background">Disable Blur background</string>
+    <string name="allow_password_copy_option">Allow password copy option</string>
+    <string name="enable_fingerprint_to_open_the_app">Enable Fingerprint to open the App</string>
+    <string name="content_desc_arrow_icon">arrow_icon</string>
+    <string name="allow_to_enter_with_wrong_password">Allow to Enter with Wrong password</string>
+    <string name="title_settings">Settings</string>
+    <string name="wip_will_add_soon">Will add this functionality soon.</string>
+    <string name="info">Info</string>
+    <string name="alert_copy_password">Turning on this feature will let you copy your password to the clipboard but Don\'t forget to clear your clipboard after use.</string>
+    <string name="ok">OK</string>
+    <string name="alert">Alert</string>
 
 </resources>

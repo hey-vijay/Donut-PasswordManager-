@@ -2,24 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vijay.bhadolia.key">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature
         android:name="android.hardware.fingerprint"
         android:required="false" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_key_logo"
+        android:allowBackup="false"
+        android:icon="@drawable/ic_donut"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_key_logo"
+        android:roundIcon="@drawable/ic_donut"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.LoginActivity"></activity>
+        <activity android:name=".ui.activity.LoginActivity"
+            android:theme="@style/AppTheme"/>
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"></activity>
-        <activity android:name=".Activity.SignUpActivity"
-            >
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".ui.activity.SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
