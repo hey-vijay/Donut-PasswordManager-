@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -68,50 +67,54 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.title_settings));
 
-        fingerPrintSwitch = view.findViewById(R.id.setting_switch_fingerprint);
-        fakeEntrySwitch = view.findViewById(R.id.setting_switch_allow_fake_password);
-        chkClipboardCopyOption = view.findViewById(R.id.setting_switch_passwordCopy);
-        chkDisableBlur = view.findViewById(R.id.setting_switch_blurBackground);
+        fingerPrintSwitch = view.findViewById(R.id.swEnableBiometric);
+        fakeEntrySwitch = view.findViewById(R.id.swEnableFakeEntry);
+        chkClipboardCopyOption = view.findViewById(R.id.swEnableClipboard);
+        chkDisableBlur = view.findViewById(R.id.swDisableBlur);
         rlFakeEntry = view.findViewById(R.id.rlEnableFakeEntry);
         imgRightArrow = view.findViewById(R.id.imgRightArrow);
 
         view.findViewById(R.id.rlFakeEntry).setOnClickListener(this);
-        view.findViewById(R.id.setting_bt_change_password).setOnClickListener(this);
-        view.findViewById(R.id.setting_bt_delete_all_password).setOnClickListener(this);
+        view.findViewById(R.id.btChangeMasterPassword).setOnClickListener(this);
+        view.findViewById(R.id.btDeleteAllPassword).setOnClickListener(this);
     }
 
     CompoundButton.OnCheckedChangeListener checkedChangeListener = ((compoundButton, state) -> {
         Log.d(TAG, "checked Listener : " + compoundButton.getId() + " state-> " + state);
-
+        String alertText = "";
         switch (compoundButton.getId()) {
-            case R.id.setting_switch_allow_fake_password:
+            case R.id.swEnableFakeEntry:
                 SmartPreferences.getInstance(getContext()).saveValue(Constants.FAKE_PASSWORD_ENABLE, state);
-                String text = (state) ? "Enable" : "Disable";
-                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                alertText = "The will also turned on the Fast Enter mode means you don't have to press Enter button.";
+                if(state) {
+                    showAlert(alertText);
+                }
                 break;
-            case R.id.setting_switch_fingerprint:
+            case R.id.swEnableBiometric:
                 validateAndEnableBiometricSensor(state);
                 break;
-            case R.id.setting_switch_blurBackground:
+            case R.id.swDisableBlur:
+                alertText = "This is experimental feature!";
+                if(state) {
+                    showAlert(alertText);
+                }
                 SmartPreferences.getInstance(getContext()).saveValue(Constants.DISABLE_BLUR_BACKGROUND, state);
                 break;
-            case R.id.setting_switch_passwordCopy:
+            case R.id.swEnableClipboard:
                 if (state) {
-                    showAlert();
+                    alertText = getString(R.string.alert_copy_password);
+                    showAlert(alertText);
                 }
                 SmartPreferences.getInstance(getContext()).saveValue(Constants.COPY_ENABLE, state);
                 break;
         }
     });
 
-    private void showAlert() {
+    private void showAlert(String alertText) {
         if (getContext() == null) return;
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.alert_copy_password))
-                .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                    //Do nothing
-                })
+                .setMessage(alertText)
                 .create();
         alertDialog.show();
     }
@@ -147,7 +150,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.setting_bt_change_password: {
+            case R.id.btChangeMasterPassword: {
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_container,
@@ -159,7 +162,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     rlFakeEntry.setVisibility(View.GONE);
                     imgRightArrow.animate()
                             .setDuration(300)
-                            .rotation(-90)
+                            .rotation(0)
                             .start();
                 } else {
                     rlFakeEntry.setVisibility(View.VISIBLE);
@@ -169,10 +172,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                             .start();
                 }
                 break;
-            case R.id.setting_bt_delete_all_password:
+            case R.id.btDeleteAllPassword:
                 Toast.makeText(getActivity(), R.string.delete_all_password, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.setting_bt_backup:
+            case R.id.btCreateBackup:
                 Toast.makeText(getActivity(), R.string.wip_will_add_soon, Toast.LENGTH_SHORT).show();
                 break;
         }

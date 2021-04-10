@@ -7,20 +7,17 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import vijay.bhadolia.key.R;
 import vijay.bhadolia.key.ui.fragments.ChangePassword;
-import vijay.bhadolia.key.ui.fragments.FakeEntryFragment;
+import vijay.bhadolia.key.ui.fragments.DummyFragment;
 import vijay.bhadolia.key.ui.fragments.SettingsFragment;
 import vijay.bhadolia.key.util.Constants;
 import vijay.bhadolia.key.ui.fragments.DashboardFragment;
@@ -30,14 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getName();
 
-    //Initializing Magic
-    private boolean correctPasswordEntered = false;
-    //private String masterUserName;
-    ImageView noImage;
+    private boolean isAuthenticUser = false;
 
     //Adding Drawer functionality
     private DashboardFragment mainFragment;
-    private FakeEntryFragment fakeEntryFragment;
+    private DummyFragment dummyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +41,21 @@ public class MainActivity extends AppCompatActivity {
         initView();
         if (getIntent() != null) {
             Intent intent = getIntent();
-            correctPasswordEntered = intent.getBooleanExtra(Constants.IS_UNLOCK, false);
+            isAuthenticUser = intent.getBooleanExtra(Constants.AUTHENTIC_USER, false);
         }
 
-        /*  if correct password is entered then open the Dashboard Fragment else fake fragment*/
+        /*  if correct password is entered then open the Dashboard Fragment else dummy fragment*/
         mainFragment = new DashboardFragment();
-        fakeEntryFragment = new FakeEntryFragment();
-        openDashboard(correctPasswordEntered);
+        dummyFragment = new DummyFragment();
+        openDashboard(isAuthenticUser);
     }
 
     private void initView() {
+        // Disable ScreenShot and app preview from recent app for security reasons
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        noImage = findViewById(R.id.imgNoItem);
-
     }
 
     private void saveCurrentTime() {
@@ -83,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d(TAG, "saveCurrentTime: " + cc.get(Calendar.HOUR_OF_DAY) + ":" +cc.get(Calendar.MINUTE));
     }
 
-    public void openDashboard(boolean correctPasswordEntered) {
-        if(correctPasswordEntered) {
+    public void openDashboard(boolean isAuthenticUser) {
+        if(isAuthenticUser) {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                     mainFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
-                    fakeEntryFragment).commit();
+                    dummyFragment).commit();
         }
     }
 

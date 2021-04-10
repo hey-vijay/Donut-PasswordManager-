@@ -22,12 +22,12 @@ import vijay.bhadolia.key.model.Password;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FakeEntryFragment#newInstance} factory method to
+ * Use the {@link DummyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FakeEntryFragment extends Fragment {
+public class DummyFragment extends Fragment {
 
-    private static final String TAG = FakeEntryFragment.class.getName();
+    private static final String TAG = DummyFragment.class.getName();
 
     //Variables for recyclerView
     private RecyclerView mRecyclerView;
@@ -39,11 +39,11 @@ public class FakeEntryFragment extends Fragment {
 
     private TextView textView;
 
-    public FakeEntryFragment() {        // Required empty public constructor
+    public DummyFragment() {        // Required empty public constructor
     }
 
-    public static FakeEntryFragment newInstance() {
-        FakeEntryFragment fragment = new FakeEntryFragment();
+    public static DummyFragment newInstance() {
+        DummyFragment fragment = new DummyFragment();
         return fragment;
     }
 
@@ -51,7 +51,7 @@ public class FakeEntryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fake_entry, container, false);
+        return inflater.inflate(R.layout.fragment_dummy, container, false);
     }
 
     @Override
@@ -69,27 +69,11 @@ public class FakeEntryFragment extends Fragment {
     }
 
     private void buildRecyclerView() {
-        //Initialising RecyclerView members
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity());
         mAdapter = new PasswordAdapter(getContext(), new PasswordClickListener() {
             @Override
             public void onClick(int position) {
-
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-
-            @Override
-            public void onViewItemPressed(int position) {
-
-            }
-
-            @Override
-            public void onViewItemUnpressed(int position) {
 
             }
         });

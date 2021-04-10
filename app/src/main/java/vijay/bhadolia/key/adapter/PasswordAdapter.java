@@ -17,20 +17,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+
 import vijay.bhadolia.key.Interfaces.PasswordClickListener;
 import vijay.bhadolia.key.R;
 import vijay.bhadolia.key.model.Password;
-import vijay.bhadolia.key.util.Constants;
 
 
 public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.NewPasswordViewHolder> {
 
     private static final String TAG = PasswordAdapter.class.getName();
 
-    private PasswordClickListener mListener;
-    private Context mContext;
-    private int DELETED = 0;
-    private int NOT_DELETED = 1;
+    private final PasswordClickListener mListener;
+    private final Context mContext;
 
     public PasswordAdapter(Context context, PasswordClickListener listener) {
         super(DIFF_UTIL);
@@ -38,7 +37,15 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.NewPa
         mContext = context;
     }
 
-    private static DiffUtil.ItemCallback<Password> DIFF_UTIL = new DiffUtil.ItemCallback<Password>() {
+    public List<Password> getPasswordList() {
+        return getCurrentList();
+    }
+
+    public Password getItem(int position) {
+        return getCurrentList().get(position);
+    }
+
+    private static final DiffUtil.ItemCallback<Password> DIFF_UTIL = new DiffUtil.ItemCallback<Password>() {
         @Override
         public boolean areItemsTheSame(@NonNull Password oldItem, @NonNull Password newItem) {
             return oldItem.getId() == newItem.getId();
@@ -67,13 +74,6 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.NewPa
     public void onBindViewHolder(@NonNull NewPasswordViewHolder holder, int position) {
         Password password = getItem(position);
         holder.title.setText(password.getTitle());
-        holder.password.setText(Constants.TempPassword);
-
-        int viewType = getItemViewType(position);
-        if (viewType == DELETED) {
-            holder.parentLayout.setLayoutParams(holder.params_invisible);
-            return;
-        }
 
         int resId = mContext.getResources().getIdentifier(password.getResIconName(), "drawable", mContext.getPackageName());
 
@@ -83,50 +83,24 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.NewPa
                 .into(holder.accountIcon);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (getCurrentList().get(position).getDeleted()) {
-            return DELETED;
-        }
-        return NOT_DELETED;
-    }
-
     static class NewPasswordViewHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout parentLayout;
+        public ConstraintLayout parentLayout;
         ImageView accountIcon;
         ImageButton showPassword;
         TextView title, password;
-        ConstraintLayout.LayoutParams params_invisible;
+        //ConstraintLayout.LayoutParams params_invisible;
 
         @SuppressLint("ClickableViewAccessibility")
         public NewPasswordViewHolder(@NonNull View itemView, final PasswordClickListener listener) {
             super(itemView);
-            //init Views
             parentLayout = itemView.findViewById(R.id.cl_itemParentLayout);
             accountIcon = itemView.findViewById(R.id.accountIcon);
             title = itemView.findViewById(R.id.tvAccountTitle);
             password = itemView.findViewById(R.id.tvAccountPassword);
             showPassword = itemView.findViewById(R.id.imgShowPassword);
-            params_invisible = new ConstraintLayout.LayoutParams(0, 0);
+            //params_invisible = new ConstraintLayout.LayoutParams(0, 0);
 
             parentLayout.setOnClickListener((view -> listener.onClick(getAdapterPosition())));
-            parentLayout.setOnLongClickListener((view -> {
-                listener.onLongClick(parentLayout, getAdapterPosition());
-                return false;
-            }));
-
-            //Attach click listener
-            /*parentLayout.setOnTouchListener((view, event) -> {
-                int position = getAdapterPosition();
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    listener.onViewItemPressed(position);
-
-                }
-                if((event.getAction() == MotionEvent.ACTION_UP)){
-                    listener.onViewItemUnpressed(position);
-                }
-                return false;
-            });*/
         }
     }
 }

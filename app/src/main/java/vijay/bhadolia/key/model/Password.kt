@@ -23,7 +23,6 @@ data class Password (
         @ColumnInfo(name = "icon")
         var resIconName:String,
 
-
         /* trying something new */
         @ColumnInfo(name = "deleted")
         var deleted:Boolean = false,

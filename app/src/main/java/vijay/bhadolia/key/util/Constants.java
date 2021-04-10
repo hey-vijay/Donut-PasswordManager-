@@ -3,9 +3,7 @@ package vijay.bhadolia.key.util;
 public class Constants {
 
 
-    public static final String IS_UNLOCK = "isUnlock";
-    public static final String TempPassword = "############";
-
+    public static final String AUTHENTIC_USER = "isUnlock";
 
     /*prefs constant keys*/
     public static final String APP_SHARED_PREFS_NAME = "vijay.bhadolia.PasswordManager";

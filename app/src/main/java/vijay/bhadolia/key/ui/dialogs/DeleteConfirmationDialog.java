@@ -22,7 +22,6 @@ public class DeleteConfirmationDialog {
                     dialog.dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                    listener.onNegativeButtonClicked();
                     dialog.dismiss();
                 })
                 .create();

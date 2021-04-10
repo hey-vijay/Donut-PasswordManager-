@@ -45,7 +45,7 @@
         <RelativeLayout
             android:id="@+id/rlEnableFakeEntry"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:layout_gravity="center_vertical"
             android:visibility="gone"
             tools:visibility="visible"
@@ -59,13 +59,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
-                android:layout_toStartOf="@+id/setting_switch_allow_fake_password"
+                android:layout_toStartOf="@+id/swEnableFakeEntry"
                 android:text="@string/setting_fake_password"
                 android:textColor="@color/darkGray"
                 android:textSize="15sp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/setting_switch_allow_fake_password"
+                android:id="@+id/swEnableFakeEntry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -79,8 +79,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@color/grey_300"/>
+            android:layout_height="1dp"
+            android:background="@color/grey_100"/>
 
 
         <RelativeLayout
@@ -98,13 +98,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
-                android:layout_toStartOf="@id/setting_switch_fingerprint"
+                android:layout_toStartOf="@id/swEnableBiometric"
                 android:text="@string/enable_fingerprint_to_open_the_app"
                 android:textColor="@color/darkGray"
                 android:textSize="15sp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/setting_switch_fingerprint"
+                android:id="@+id/swEnableBiometric"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -117,8 +117,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@color/grey_300" />
+            android:layout_height="1dp"
+            android:background="@color/grey_100"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -135,13 +135,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
-                android:layout_toStartOf="@id/setting_switch_passwordCopy"
+                android:layout_toStartOf="@id/swEnableClipboard"
                 android:text="@string/allow_password_copy_option"
                 android:textColor="@color/darkGray"
                 android:textSize="15sp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/setting_switch_passwordCopy"
+                android:id="@+id/swEnableClipboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -154,8 +154,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@color/grey_300"/>
+            android:layout_height="1dp"
+            android:background="@color/grey_100"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -172,13 +172,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
-                android:layout_toStartOf="@id/setting_switch_blurBackground"
+                android:layout_toStartOf="@id/swDisableBlur"
                 android:text="@string/disable_blur_background"
                 android:textColor="@color/darkGray"
                 android:textSize="15sp" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/setting_switch_blurBackground"
+                android:id="@+id/swDisableBlur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -191,12 +191,12 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@color/grey_300"
+            android:layout_height="1dp"
+            android:background="@color/grey_100"
             android:layout_marginBottom="35dp"/>
 
         <Button
-            android:id="@+id/setting_bt_change_password"
+            android:id="@+id/btChangeMasterPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/blue"
@@ -208,7 +208,7 @@
             android:transitionName="transition_change_password" />
 
         <Button
-            android:id="@+id/setting_bt_delete_all_password"
+            android:id="@+id/btDeleteAllPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -221,7 +221,7 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/setting_bt_backup"
+            android:id="@+id/btCreateBackup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"

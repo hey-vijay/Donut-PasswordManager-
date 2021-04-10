@@ -29,7 +29,7 @@ public interface PasswordDao {
     @Update
     void updatePassword(Password password);
 
-    @Query("SELECT * from passwords ORDER BY id ASC")
+    @Query("SELECT * from passwords WHERE deleted == 0 ORDER BY id ASC")
     LiveData<List<Password>> getAllPassword();
 
     @Query("SELECT * FROM passwords WHERE id = :id")

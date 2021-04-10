@@ -38,7 +38,7 @@ public class AddPasswordBottomSheet extends BottomSheetDialogFragment implements
     Button btSave;
     ImageView imgAccountIcon;
 
-    private AddPasswordListener mListener;
+    private final AddPasswordListener mListener;
 
     private int resourceId = -1;
     private String resourceIconName = "";
@@ -89,7 +89,6 @@ public class AddPasswordBottomSheet extends BottomSheetDialogFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogThemeNoFloating);
-
     }
 
     @NonNull
@@ -121,7 +120,7 @@ public class AddPasswordBottomSheet extends BottomSheetDialogFragment implements
 
         btSave.setOnClickListener(view1 -> {
             if (mListener != null) {
-                if (isEmpty()) {
+                if (validateFields()) {
                     Password _password = new Password(
                             etTitle.getEditText().getText().toString(),
                             etLoginId.getEditText().getText().toString(),
@@ -170,7 +169,7 @@ public class AddPasswordBottomSheet extends BottomSheetDialogFragment implements
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        changeButtonBackground(isEmpty());
+        changeButtonBackground(validateFields());
     }
 
     @Override
@@ -186,7 +185,7 @@ public class AddPasswordBottomSheet extends BottomSheetDialogFragment implements
         }
     }
 
-    private boolean isEmpty() {
+    private boolean validateFields() {
         boolean et_1 = etTitle.getEditText().getText().toString().trim().isEmpty();
         boolean et_2 = etLoginId.getEditText().getText().toString().trim().isEmpty();
         boolean et_3 = etPassword.getEditText().getText().toString().trim().isEmpty();

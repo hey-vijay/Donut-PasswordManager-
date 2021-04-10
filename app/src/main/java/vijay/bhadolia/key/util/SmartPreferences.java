@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class SmartPreferences {
     private static final String TAG = SmartPreferences.class.getName();
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private static SmartPreferences smartPreferences;
 
     public static SmartPreferences getInstance(Context context) {
@@ -41,6 +41,11 @@ public class SmartPreferences {
         prefsEditor.putFloat(key, value);
         prefsEditor.apply();
     }
+    public void saveValue(String key, Long value) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.putLong(key, value);
+        prefsEditor.apply();
+    }
 
 
 
@@ -66,6 +71,13 @@ public class SmartPreferences {
     public Float getValue(String key, Float defaultValue) {
         if (sharedPreferences!= null) {
             return sharedPreferences.getFloat(key, defaultValue);
+        }
+        return defaultValue;
+    }
+
+    public Long getValue(String key, Long defaultValue) {
+        if (sharedPreferences!= null) {
+            return sharedPreferences.getLong(key, defaultValue);
         }
         return defaultValue;
     }

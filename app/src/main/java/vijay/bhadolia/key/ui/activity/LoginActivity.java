@@ -137,10 +137,10 @@ public class LoginActivity extends AppCompatActivity {
         //biometricPrompt.authenticate(promptInfo);
     }
 
-    private void openMainActivity(boolean correctPasswordEntered) {
+    private void openMainActivity(boolean authenticUser) {
         SmartPreferences.getInstance(this).saveValue(Constants.SHOW_LAST_ACTIVE_STATUS, true);
         Intent i = new Intent(this, MainActivity.class);
-        i.putExtra(Constants.IS_UNLOCK, correctPasswordEntered);
+        i.putExtra(Constants.AUTHENTIC_USER, authenticUser);
         startActivity(i);
         finish();
     }
@@ -157,8 +157,6 @@ public class LoginActivity extends AppCompatActivity {
         masterPassword = SmartPreferences.getInstance(this).getValue(Constants.MASTER_PASSWORD, "");
         isFingerPrintUnable = SmartPreferences.getInstance(this).getValue(Constants.FINGERPRINT_ENABLE, false);
         isFakeEntryUnable = SmartPreferences.getInstance(this).getValue(Constants.FAKE_PASSWORD_ENABLE, false);
-
-        Log.d(TAG, "loadData: " + masterPassword);
     }
 
 }

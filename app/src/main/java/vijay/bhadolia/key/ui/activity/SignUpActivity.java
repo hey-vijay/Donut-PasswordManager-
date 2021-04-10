@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import com.google.android.material.textfield.TextInputLayout;
 import vijay.bhadolia.key.R;
@@ -60,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
                 SmartPreferences.getInstance(this).saveValue(Constants.MASTER_PASSWORD, KEY);
                 SmartPreferences.getInstance(this).saveValue(Constants.FIRST_TIME, false);
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra(Constants.IS_UNLOCK, true);
+                intent.putExtra(Constants.AUTHENTIC_USER, true);
                 startActivity(intent);
                 finish();
             }

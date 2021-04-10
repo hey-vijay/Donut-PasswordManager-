@@ -63,6 +63,7 @@ import vijay.bhadolia.key.util.BlurBackground;
 import vijay.bhadolia.key.util.Constants;
 import vijay.bhadolia.key.util.Constants.SHOW_PASSWORD_TYPE;
 import vijay.bhadolia.key.util.SmartPreferences;
+import vijay.bhadolia.key.util.TimeUtils;
 
 
 public class DashboardFragment extends Fragment {
@@ -77,20 +78,19 @@ public class DashboardFragment extends Fragment {
     private RelativeLayout rlLayoutForBlur;
     private FloatingActionButton fab;
     private PasswordAdapter passwordAdapter;
-    private List<Password> passwordList;
 
     private RelativeLayout layoutShowPassword;
-    TextView tvAccountTitle, tvAccountId, tvAccountPassword;
+    TextView tvAccountTitle, tvAccountId, tvPassword;
     TextView tvLastOpened;
     CardView cvShowPassword;
 
     //save the last deleted password for Undo option or
     //use this to get the data while editing the password
-    private Password deletedPassword;
+    private Password lastDeletedPassword;
     private int itemPosition = -1;
 
     //Initializing Magic
-    private ImageView noImage, imgShowPassword;
+    private ImageView noItemImage, imgShowPassword;
 
     private boolean disableBlur = false;
     private boolean allowCopyToClipBoard = false;
@@ -98,8 +98,6 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
         // Required empty public constructor
     }
-
-    //TODO: Last login
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,35 +109,34 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        init(view);
+        initView(view);
         setHasOptionsMenu(true);
         buildRecyclerView();
-        fab.setOnClickListener(v -> showBottomSheetDialog(null));
+        fab.setOnClickListener(v -> openInputDialog(null));
 
         viewModel = new ViewModelProvider(this).get(PasswordViewModel.class);
         subscribeUi(viewModel.getPasswordList());
     }
 
-    private void subscribeUi(LiveData<List<Password>> passwordList) {
-        if (passwordList != null) {
-            passwordList.observe(getViewLifecycleOwner(), passwords -> {
-                this.passwordList = passwordList.getValue();
-                passwordAdapter.submitList(passwords);
-                DashboardFragment.this.passwordList = passwords;
+    private void subscribeUi(LiveData<List<Password>> passwords) {
+        if (passwords != null) {
+            passwords.observe(getViewLifecycleOwner(), passwords_ -> {
+                Log.d(TAG, "subscribeUi: " + passwords_.toString());
+                passwordAdapter.submitList(passwords_);
 
-                if (allPasswordAreDeleted()) {
-                    noImage.setVisibility(View.VISIBLE);
+                if (passwords_.isEmpty()) {
+                    noItemImage.setVisibility(View.VISIBLE);
                 } else {
-                    noImage.setVisibility(View.INVISIBLE);
+                    noItemImage.setVisibility(View.INVISIBLE);
                 }
             });
         }
     }
 
-    private void init(View view) {
+    private void initView(View view) {
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.activity_title_key));
 
-        noImage = view.findViewById(R.id.imgNoItem);
+        noItemImage = view.findViewById(R.id.imgNoItem);
         imgShowPassword = view.findViewById(R.id.imgShowPassword);
         fab = view.findViewById(R.id.fab);
         layoutShowPassword = view.findViewById(R.id.llShowPassword);
@@ -148,18 +145,18 @@ public class DashboardFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView);
         tvAccountTitle = view.findViewById(R.id.tvAccountTitle);
         tvAccountId = view.findViewById(R.id.tvAccountId);
-        tvAccountPassword = view.findViewById(R.id.tvAccountPassword);
+        tvPassword = view.findViewById(R.id.tvAccountPassword);
         tvLastOpened = view.findViewById(R.id.tvLastActive);
         cvShowPassword = view.findViewById(R.id.cv_ShowPasswordDialog);
 
         initVariables();
         showLastSeenDialog();
 
-        tvAccountPassword.setOnLongClickListener((view1 -> {
+        tvPassword.setOnLongClickListener((view1 -> {
             if (allowCopyToClipBoard) {
                 if (getContext() == null) return true;
 
-                String password = tvAccountPassword.getText().toString();
+                String password = tvPassword.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.label), password);
                 clipboard.setPrimaryClip(clip);
@@ -177,10 +174,10 @@ public class DashboardFragment extends Fragment {
         boolean showLastSeen = SmartPreferences.getInstance(getContext()).getValue(Constants.SHOW_LAST_ACTIVE_STATUS, true);
         if(showLastSeen) {
             SmartPreferences.getInstance(getContext()).saveValue(Constants.SHOW_LAST_ACTIVE_STATUS, false);
-            String time = SmartPreferences.getInstance(getContext()).getValue(Constants.LAST_ACTIVE_TIME, "");
+            Long timeInMillis = SmartPreferences.getInstance(getContext()).getValue(Constants.LAST_ACTIVE_TIME, 0L);
             saveCurrentTime();
-            if(time.isEmpty()) return;
-            String text = "Last open : " + time;
+            if(timeInMillis == 0) return;
+            String text = TimeUtils.getTimeDifference(timeInMillis);
             tvLastOpened.setVisibility(View.VISIBLE);
             tvLastOpened.setText(text);
         }else {
@@ -190,20 +187,10 @@ public class DashboardFragment extends Fragment {
     }
 
     private void saveCurrentTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
-        String formattedDate = df.format(c.getTime());
-        Log.d(TAG, "saveCurrentTime: formattedDate " + formattedDate);
-        SmartPreferences.getInstance(getContext()).saveValue(Constants.LAST_ACTIVE_TIME, formattedDate);
+        Long currentTimeMillis = System.currentTimeMillis();
+        Log.d(TAG, "saveCurrentTime: formattedDate " + currentTimeMillis);
+        SmartPreferences.getInstance(getContext()).saveValue(Constants.LAST_ACTIVE_TIME, currentTimeMillis);
 
-//        Calendar cc = Calendar.getInstance();
-//        int year = cc.get(Calendar.YEAR);
-//        int month = cc.get(Calendar.MONTH);
-//        int mDay = cc.get(Calendar.DAY_OF_MONTH);
-//        int ap = cc.get(Calendar.AM_PM);
-//        cc.get(Calendar.DAY_OF_MONTH);
-//        Log.d(TAG, "saveCurrentTime: Date " + year + ":" + month + ":" + mDay + " ," + ap);
-//        Log.d(TAG, "saveCurrentTime: " + cc.get(Calendar.HOUR_OF_DAY) + ":" +cc.get(Calendar.MINUTE));
     }
 
     private void initVariables() {
@@ -229,28 +216,7 @@ public class DashboardFragment extends Fragment {
         layoutShowPassword.setOnTouchListener(showPasswordTouchListener);
     }
 
-    PasswordClickListener passwordClickListener = new PasswordClickListener() {
-        @Override
-        public void onClick(int position) {
-            showPassword(true, position, SHOW_PASSWORD_TYPE.CENTER_DIALOG.getValue());
-        }
-
-        @Override
-        public void onLongClick(View view, int position) {
-            Toast.makeText(getContext(), R.string.move_up_down, Toast.LENGTH_SHORT)
-                    .show();
-        }
-
-        @Override
-        public void onViewItemPressed(int position) {
-            //Do nothing for now
-        }
-
-        @Override
-        public void onViewItemUnpressed(int position) {
-            //Do nothing for now
-        }
-    };
+    PasswordClickListener passwordClickListener = position -> showPassword(true, position, SHOW_PASSWORD_TYPE.CENTER_DIALOG.getValue());
 
     @SuppressLint("ClickableViewAccessibility")
     RecyclerView.OnTouchListener showPasswordTouchListener = (view, motionEvent) -> {
@@ -260,8 +226,7 @@ public class DashboardFragment extends Fragment {
         return true;
     };
 
-
-    private void viewVisibility(boolean show, View... views) {
+    private void changeViewVisibility(boolean show, View... views) {
         if (show) {
             for (View view : views) {
                 view.setVisibility(View.VISIBLE);
@@ -274,18 +239,18 @@ public class DashboardFragment extends Fragment {
     }
 
     private void showPassword(boolean show, int position, int password_type) {
-        Log.d(TAG, "showPassword: " + SHOW_PASSWORD_TYPE.CENTER_DIALOG);
-
         if (show) {
-            //Vibrate
-            viewVisibility(false, fab);
+            changeViewVisibility(false, fab);
             Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(16);
-            Password password = passwordList.get(position);
+            Password password = passwordAdapter.getItem(position);
             tvAccountTitle.setText(password.getTitle());
             tvAccountId.setText(password.getAccountName());
-            tvAccountPassword.setText(password.getPassword());
+            tvPassword.setText(password.getPassword());
             layoutShowPassword.setVisibility(View.VISIBLE);
+            //Pop animation
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.dialog_slight_zoom);
+            cvShowPassword.startAnimation(animation);
             if(!disableBlur) {
                 Bitmap bitmap = BlurBackground.getBitmapFromView(rlLayoutForBlur);
                 Bitmap fastBlur = BlurBackground.blur(getContext(), bitmap);
@@ -293,12 +258,9 @@ public class DashboardFragment extends Fragment {
                         .load(fastBlur)
                         .into(imgShowPassword);
             }
-            //Pop animation
-            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.dialog_slight_zoom);
-            cvShowPassword.startAnimation(animation);
         } else {
             layoutShowPassword.setVisibility(View.GONE);
-            viewVisibility(true, fab);
+            changeViewVisibility(true, fab);
         }
     }
 
@@ -336,11 +298,6 @@ public class DashboardFragment extends Fragment {
             Log.d(TAG, "onPositiveButtonClicked: ");
             deletePassword();
         }
-
-        @Override
-        public void onNegativeButtonClicked() {
-            //Do nothing
-        }
     };
 
     private void showDeleteConfirmationDialog(Password deletedPassword) {
@@ -355,16 +312,15 @@ public class DashboardFragment extends Fragment {
     }
 
     private void deletePassword() {
-        deletedPassword.setDeleted(true);
-        viewModel.update(deletedPassword);
+        lastDeletedPassword.setDeleted(true);
+        viewModel.update(lastDeletedPassword);
         passwordAdapter.notifyItemChanged(itemPosition);
-        showSnackBar(deletedPassword.getTitle());
+        showSnackBar(lastDeletedPassword.getTitle());
     }
 
-    private void addDeletedPassword() {
-        deletedPassword.setDeleted(false);
-        viewModel.update(deletedPassword);
-        passwordAdapter.notifyDataSetChanged();
+    private void restoreDeletedPassword() {
+        lastDeletedPassword.setDeleted(false);
+        viewModel.update(lastDeletedPassword);
     }
 
     @Override
@@ -373,18 +329,19 @@ public class DashboardFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void showBottomSheetDialog(Password password) {
-        AddPasswordBottomSheet bottomSheet = new AddPasswordBottomSheet((password_, newPassword) -> {
+    //  @password that need to be edit
+    private void openInputDialog(Password password) {
+        AddPasswordBottomSheet bottomSheet = new AddPasswordBottomSheet((password_, isNewPassword) -> {
             Log.d(TAG, "showBottomSheetDialog: password " + password_.toString());
-            addPassword(password_, newPassword);
+            addPassword(password_, isNewPassword);
         }, password);
         bottomSheet.show(getParentFragmentManager(), "add_password");
     }
 
-    private void showSnackBar(String label) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, label + " " + getString(R.string.deleted), Snackbar.LENGTH_LONG)
+    private void showSnackBar(String text) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, text + " " + getString(R.string.deleted), Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, v -> {
-                    addDeletedPassword();
+                    restoreDeletedPassword();
                     Snackbar snackBar1 = Snackbar.make(coordinatorLayout, R.string.undo_successful, Snackbar.LENGTH_SHORT);
                     snackBar1.getView().setBackgroundColor(Color.DKGRAY);
                     snackBar1.show();
@@ -428,9 +385,16 @@ public class DashboardFragment extends Fragment {
         }
 
         @Override
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if(viewHolder != null)
+            viewHolder.itemView.setAlpha(0.3f);
+        }
+
+        @Override
         public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
             super.clearView(recyclerView, viewHolder);
-            Log.d(TAG, "clearView: ");
+            viewHolder.itemView.setAlpha(1.0f);
         }
 
         @Override
@@ -440,6 +404,7 @@ public class DashboardFragment extends Fragment {
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
 
+            List<Password> passwordList = passwordAdapter.getPasswordList();
             if (fromPosition < toPosition) {
                 for (int i = fromPosition; i < toPosition; i++) {
                     Collections.swap(passwordList, i, i + 1);
@@ -474,37 +439,26 @@ public class DashboardFragment extends Fragment {
             Log.d(TAG, "onSwiped: ");
             int position = viewHolder.getAdapterPosition();
             itemPosition = position;
+            passwordAdapter.notifyItemChanged(position);
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    passwordAdapter.notifyItemChanged(position);
-                    deletedPassword = passwordList.get(position);
-                    showDeleteConfirmationDialog(deletedPassword);
+                    lastDeletedPassword = passwordAdapter.getItem(position);
+                    showDeleteConfirmationDialog(lastDeletedPassword);
                     break;
                 case ItemTouchHelper.LEFT:
-                    passwordAdapter.notifyItemChanged(position);
-                    showBottomSheetDialog(passwordList.get(position));
+                    openInputDialog(passwordAdapter.getItem(position));
                     break;
             }
         }
     };
 
-    private void addPassword(Password password, boolean editedPassword) {
-        if (!editedPassword) {
-            viewModel.update(password);
-        } else {
+    private void addPassword(Password password, boolean isNewPassword) {
+        if (isNewPassword) {
             viewModel.insert(password);
+        } else {
+            viewModel.update(password);
         }
     }
-
-    private boolean allPasswordAreDeleted() {
-        for(Password password: passwordList) {
-            if(!password.getDeleted()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }
 
 /*
